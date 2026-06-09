@@ -1,0 +1,79 @@
+.stats-section{
+    background:#0f0f0f;
+    padding:100px 0;
+}
+
+/* Heading */
+
+.stats-title{
+    font-size:48px;
+    font-weight:800;
+    color:#ffffff;
+    margin-bottom:15px;
+}
+
+.stats-subtitle{
+    color:#bdbdbd;
+    font-size:18px;
+    max-width:700px;
+    margin:auto;
+}
+
+/* Cards */
+
+.stat-card{
+    background:#1a1a1a;
+    border:1px solid #2c2c2c;
+    border-radius:20px;
+    padding:35px 25px;
+    text-align:center;
+    transition:all 0.4s ease;
+    height:100%;
+}
+
+.stat-card:hover{
+    transform:translateY(-8px);
+    border-color:#ffc107;
+    box-shadow:0 15px 35px rgba(255,193,7,0.15);
+}
+
+/* Icons */
+
+.stat-icon{
+    font-size:45px;
+    color:#ffc107;
+    margin-bottom:20px;
+}
+
+/* Title */
+
+.stat-card h4{
+    font-weight:700;
+    color:#ffffff;
+    margin-bottom:15px;
+}
+
+/* Description */
+
+.stat-card p{
+    color:#bdbdbd;
+    line-height:1.7;
+    margin:0;
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+    .stats-title{
+        font-size:34px;
+    }
+
+    .stats-subtitle{
+        font-size:16px;
+    }
+
+    .stat-icon{
+        font-size:38px;
+    }
+}

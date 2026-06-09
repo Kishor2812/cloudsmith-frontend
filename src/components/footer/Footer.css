@@ -1,0 +1,15 @@
+.footer{
+    background:#050505;
+    color:white;
+    padding:60px 0;
+}
+
+.footer ul{
+    padding:0;
+}
+
+.footer li{
+    list-style:none;
+    margin-bottom:10px;
+    color:#ccc;
+}

@@ -1,0 +1,12 @@
+.contact-section{
+    padding:100px 0;
+    background:white;
+}
+
+.contact-btn{
+    border:none;
+    background:#ffbe0b;
+    padding:12px 25px;
+    border-radius:10px;
+    font-weight:700;
+}

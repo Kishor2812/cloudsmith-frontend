@@ -1,0 +1,90 @@
+.trusted-section{
+    padding:100px 0;
+    background:#121212;
+}
+
+.trusted-title{
+    font-size:48px;
+    font-weight:800;
+    color:#ffffff;
+    margin-bottom:15px;
+}
+
+.trusted-subtitle{
+    color:#bdbdbd;
+    font-size:18px;
+}
+
+/* Logo Area */
+
+.logo-container{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:20px;
+}
+
+.logo-box{
+    padding:18px 35px;
+    border-radius:15px;
+    background:#1a1a1a;
+    border:1px solid #2c2c2c;
+    color:#ffc107;
+    font-weight:800;
+    transition:0.3s;
+}
+
+.logo-box:hover{
+    transform:translateY(-5px);
+    border-color:#ffc107;
+    box-shadow:0 10px 25px rgba(255,193,7,0.15);
+}
+
+/* Stats Cards */
+
+.counter-card{
+    background:#1a1a1a;
+    border:1px solid #2c2c2c;
+    border-radius:20px;
+    padding:35px;
+    text-align:center;
+    transition:0.4s;
+    height:100%;
+}
+
+.counter-card:hover{
+    transform:translateY(-8px);
+    border-color:#ffc107;
+    box-shadow:0 15px 35px rgba(255,193,7,0.15);
+}
+
+.counter-card h2{
+    color:#ffc107;
+    font-size:42px;
+    font-weight:900;
+    margin-bottom:10px;
+}
+
+.counter-card p{
+    color:#ffffff;
+    margin:0;
+    font-size:17px;
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+    .trusted-title{
+        font-size:34px;
+    }
+
+    .logo-box{
+        padding:15px 25px;
+        font-size:14px;
+    }
+
+    .counter-card h2{
+        font-size:32px;
+    }
+}

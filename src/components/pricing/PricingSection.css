@@ -1,0 +1,116 @@
+.pricing-section{
+    padding:100px 0;
+    background:#121212;
+}
+
+/* Heading */
+
+.pricing-title{
+    font-size:48px;
+    font-weight:800;
+    color:#ffffff;
+    margin-bottom:15px;
+}
+
+.pricing-subtitle{
+    color:#bdbdbd;
+    font-size:18px;
+    max-width:800px;
+    margin:auto;
+}
+
+/* Factor Cards */
+
+.pricing-factor-card{
+    background:#1a1a1a;
+    border:1px solid #2c2c2c;
+    border-radius:20px;
+    padding:35px;
+    text-align:center;
+    height:100%;
+    transition:all 0.4s ease;
+}
+
+.pricing-factor-card:hover{
+    transform:translateY(-10px);
+    border-color:#ffc107;
+    box-shadow:0 15px 35px rgba(255,193,7,0.15);
+}
+
+/* Icons */
+
+.pricing-icon{
+    width:75px;
+    height:75px;
+    background:#ffc107;
+    color:#000;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:30px;
+    margin:0 auto 25px;
+    transition:0.3s;
+}
+
+.pricing-factor-card:hover .pricing-icon{
+    transform:rotate(10deg) scale(1.05);
+}
+
+/* Title */
+
+.pricing-factor-card h4{
+    color:#ffffff;
+    font-weight:700;
+    margin-bottom:15px;
+}
+
+/* Description */
+
+.pricing-factor-card p{
+    color:#bdbdbd;
+    line-height:1.8;
+    margin:0;
+}
+
+/* Button */
+
+.pricing-btn{
+    display:inline-block;
+    background:#ffc107;
+    color:#000;
+    padding:14px 35px;
+    border-radius:50px;
+    font-weight:700;
+    text-decoration:none;
+    transition:0.3s;
+}
+
+.pricing-btn:hover{
+    background:#ffca2c;
+    transform:translateY(-3px);
+    color:#000;
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+    .pricing-title{
+        font-size:34px;
+    }
+
+    .pricing-subtitle{
+        font-size:16px;
+    }
+
+    .pricing-factor-card{
+        padding:25px;
+    }
+
+    .pricing-icon{
+        width:65px;
+        height:65px;
+        font-size:26px;
+    }
+}

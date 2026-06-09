@@ -1,0 +1,86 @@
+.testimonials-section{
+    padding:100px 0;
+    background:#121212;
+}
+
+/* Heading */
+
+.testimonial-title{
+    font-size:48px;
+    font-weight:800;
+    color:#ffffff;
+    margin-bottom:15px;
+}
+
+.testimonial-subtitle{
+    color:#bdbdbd;
+    font-size:18px;
+    max-width:700px;
+    margin:auto;
+}
+
+/* Testimonial Cards */
+
+.testimonial-card{
+    background:#1a1a1a;
+    border:1px solid #2c2c2c;
+    border-radius:20px;
+    padding:35px;
+    transition:all 0.4s ease;
+    height:100%;
+}
+
+.testimonial-card:hover{
+    transform:translateY(-10px);
+    border-color:#ffc107;
+    box-shadow:0 15px 35px rgba(255,193,7,0.15);
+}
+
+/* Stars */
+
+.stars{
+    color:#ffc107;
+    margin-bottom:20px;
+    font-size:18px;
+}
+
+/* Review */
+
+.review{
+    color:#d0d0d0;
+    line-height:1.9;
+    margin-bottom:25px;
+    font-style:italic;
+}
+
+/* Customer Name */
+
+.testimonial-card h5{
+    color:#ffffff;
+    font-weight:700;
+    margin-bottom:5px;
+}
+
+/* Company */
+
+.testimonial-card span{
+    color:#ffc107;
+    font-size:14px;
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+    .testimonial-title{
+        font-size:34px;
+    }
+
+    .testimonial-subtitle{
+        font-size:16px;
+    }
+
+    .testimonial-card{
+        padding:25px;
+    }
+}

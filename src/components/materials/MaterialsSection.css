@@ -1,0 +1,97 @@
+.materials-section{
+    padding:100px 0;
+    background:#0f0f0f;
+}
+
+/* Heading */
+
+.materials-title{
+    font-size:48px;
+    font-weight:800;
+    color:#ffffff;
+    margin-bottom:15px;
+}
+
+.materials-subtitle{
+    color:#bdbdbd;
+    max-width:700px;
+    margin:auto;
+    font-size:18px;
+}
+
+/* Cards */
+
+.material-card{
+    background:#1a1a1a;
+    border:1px solid #2c2c2c;
+    border-radius:20px;
+    padding:35px;
+    text-align:center;
+    height:100%;
+    transition:all 0.4s ease;
+}
+
+.material-card:hover{
+    transform:translateY(-10px);
+    border-color:#ffc107;
+    box-shadow:0 15px 35px rgba(255,193,7,0.15);
+}
+
+/* Icon */
+
+.material-icon{
+    width:80px;
+    height:80px;
+    background:#ffc107;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:0 auto 25px;
+    font-size:32px;
+    color:#000;
+    transition:0.3s;
+}
+
+.material-card:hover .material-icon{
+    transform:rotate(10deg) scale(1.05);
+}
+
+/* Title */
+
+.material-card h4{
+    font-weight:700;
+    color:#ffffff;
+    margin-bottom:15px;
+}
+
+/* Description */
+
+.material-card p{
+    color:#bdbdbd;
+    line-height:1.8;
+    margin:0;
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+    .materials-title{
+        font-size:34px;
+    }
+
+    .materials-subtitle{
+        font-size:16px;
+    }
+
+    .material-card{
+        padding:25px;
+    }
+
+    .material-icon{
+        width:70px;
+        height:70px;
+        font-size:28px;
+    }
+}

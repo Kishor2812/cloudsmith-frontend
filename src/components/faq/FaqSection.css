@@ -1,0 +1,13 @@
+.faq-section{
+    padding:100px 0;
+    background:#f8f9fa;
+}
+
+.faq-title{
+    font-size:48px;
+    font-weight:800;
+}
+
+.faq-subtitle{
+    color:#666;
+}

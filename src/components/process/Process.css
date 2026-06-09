@@ -1,0 +1,116 @@
+.process-section{
+    background:#121212;
+    padding:100px 0;
+    margin:80px 20px;
+    border-radius:30px;
+    border:1px solid #2c2c2c;
+}
+
+.process-title{
+    font-size:48px;
+    font-weight:800;
+    color:#ffffff;
+    margin-bottom:20px;
+}
+
+.process-desc{
+    color:#bdbdbd;
+    line-height:1.8;
+    font-size:18px;
+}
+
+/* Process Cards */
+
+.process-card{
+    background:#1a1a1a;
+    border:1px solid #2c2c2c;
+    border-radius:20px;
+    padding:30px 20px;
+    transition:all 0.4s ease;
+    height:100%;
+}
+
+.process-card:hover{
+    transform:translateY(-8px);
+    border-color:#ffc107;
+    box-shadow:0 15px 35px rgba(255,193,7,0.15);
+}
+
+/* Number Circle */
+
+.process-number{
+    width:45px;
+    height:45px;
+    background:#ffc107;
+    color:#000;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:700;
+    margin:0 auto 20px;
+}
+
+/* Icon */
+
+.process-icon{
+    font-size:50px;
+    color:#ffc107;
+    margin-bottom:20px;
+}
+
+/* Heading */
+
+.process-card h5{
+    color:#ffffff;
+    font-weight:700;
+    margin-bottom:12px;
+}
+
+/* Description */
+
+.process-card p{
+    color:#bdbdbd;
+    margin:0;
+    line-height:1.7;
+}
+
+/* Tablet */
+
+@media(max-width:992px){
+
+    .process-title{
+        text-align:center;
+    }
+
+    .process-desc{
+        text-align:center;
+        margin-bottom:40px;
+    }
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+    .process-section{
+        margin:40px 10px;
+        padding:70px 20px;
+    }
+
+    .process-title{
+        font-size:34px;
+    }
+
+    .process-desc{
+        font-size:16px;
+    }
+
+    .process-card{
+        margin-bottom:25px;
+    }
+
+    .process-icon{
+        font-size:42px;
+    }
+}
