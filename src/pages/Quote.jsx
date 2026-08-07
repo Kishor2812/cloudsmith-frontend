@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+//import axios from "axios";
+import API from "../services/api";
 import Navbar from "../components/navbar/Navbar";
 import Footer from "../components/footer/Footer";
+import AddressModal from "../components/AddressModal";
 
 function Quote() {
 
@@ -19,11 +21,29 @@ function Quote() {
   const [manufacturingFactor] =
     useState(1.0);
 
+    const [quotePreview, setQuotePreview] = useState(null);
+
   const [formData, setFormData] = useState({
     process: "",
     material: "",
     quantity: 1
   });
+
+  const [uploadedFileName,
+       setUploadedFileName] =
+useState("");
+
+const [showAddressModal, setShowAddressModal] = useState(false);
+
+const [addressData, setAddressData] = useState({
+  company: "",
+  addressLine1: "",
+  addressLine2: "",
+  city: "",
+  state: "",
+  country: "",
+  pincode: ""
+});
 
   useEffect(() => {
 
@@ -33,32 +53,32 @@ function Quote() {
       formData.quantity
     ) {
 
-      axios
-        .get(
-          "http://localhost:8080/api/quotes/preview",
+      API
+    .get(
+        "/quotes/preview",
           {
-            params: {
-              material:
-                formData.material,
-
-              process:
-                formData.process,
-
-              quantity:
-                formData.quantity,
-
-              factor:
-                manufacturingFactor
-            }
+   params: {
+  material: formData.material,
+  process: formData.process,
+  quantity: formData.quantity,
+  volume: cadAnalysis ? cadAnalysis.volume : 1,
+  surfaceArea: cadAnalysis ? cadAnalysis.surfaceArea : 0,
+  holeCount: cadAnalysis ? cadAnalysis.holeCount : 0,
+  deliveryType: "Standard"
+}
           }
         )
-        .then((response) => {
+      .then((response) => {
 
-          setPreviewPrice(
-            response.data
-          );
+  console.log(response.data);
 
-        })
+  setQuotePreview(response.data);
+
+  setPreviewPrice(
+    response.data.finalAmount
+  );
+
+})
         .catch(console.error);
     }
 
@@ -66,8 +86,9 @@ function Quote() {
     formData.material,
     formData.process,
     formData.quantity,
-    manufacturingFactor
-  ]);
+    manufacturingFactor,
+    cadAnalysis
+]);
 
   const handleChange = (e) => {
 
@@ -78,6 +99,17 @@ function Quote() {
     });
 
   };
+
+  const handleAddressChange = (e) => {
+
+  setAddressData({
+    ...addressData,
+    [e.target.name]: e.target.value
+  });
+
+};
+
+
 const handleFileChange = async (e) => {
 
   const selectedFile =
@@ -102,21 +134,32 @@ const handleFileChange = async (e) => {
       )
     );
 
-    const response =
-      await axios.post(
-        "http://localhost:8080/api/upload",
-        formData,
-        {
-          headers: {
-            "Content-Type":
-              "multipart/form-data"
-          }
-        }
-      );
+  const response =
+ await API.post(
+    "/upload",
+    formData,
+    {
+      headers: {
+        "Content-Type":
+          "multipart/form-data"
+      }
+    }
+  );
 
-    loadCadAnalysis(
-      response.data.fileName
-    );
+setUploadedFileName(
+  response.data.fileName
+);
+
+// AUTO SELECT PROCESS
+setFormData(prev => ({
+  ...prev,
+  process:
+    response.data.recommendedProcess
+}));
+
+loadCadAnalysis(
+  response.data.fileName
+);
 
   } catch (error) {
 
@@ -134,9 +177,9 @@ const handleFileChange = async (e) => {
     try {
 
       const response =
-        await axios.get(
-          `http://localhost:8080/api/cad/file/${fileName}`
-        );
+        await API.get(
+    `/cad/file/${fileName}`
+);
 
       setCadAnalysis(
         response.data
@@ -164,6 +207,18 @@ const handleFileChange = async (e) => {
 
     try {
 
+      const email = localStorage.getItem("email");
+
+const checkResponse = await API.get("/address/check", {
+  params: { email }
+});
+
+if (!checkResponse.data) {
+  setShowAddressModal(true);
+  return;
+}
+
+
       const quoteData = {
 
         email:
@@ -172,7 +227,7 @@ const handleFileChange = async (e) => {
           ),
 
         fileName:
-          file.name,
+  uploadedFileName,
 
         material:
           formData.material,
@@ -190,8 +245,8 @@ const handleFileChange = async (e) => {
       };
 
       const response =
-        await axios.post(
-          "http://localhost:8080/api/quotes/save",
+        await API.post(
+    "/quotes/save",
           quoteData
         );
 
@@ -212,6 +267,44 @@ const handleFileChange = async (e) => {
       );
     }
   };
+
+  const saveAddress = async () => {
+
+  try {
+
+    await API.post("/address/save", {
+
+      email: localStorage.getItem("email"),
+
+      company: addressData.company,
+
+      addressLine1: addressData.addressLine1,
+
+      addressLine2: addressData.addressLine2,
+
+      city: addressData.city,
+
+      state: addressData.state,
+
+      country: addressData.country,
+
+      pincode: addressData.pincode
+
+    });
+
+    setShowAddressModal(false);
+
+    alert("Address Saved Successfully");
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert("Failed To Save Address");
+
+  }
+
+};
 
   return (
     <>
@@ -269,39 +362,15 @@ const handleFileChange = async (e) => {
                     Manufacturing Process
                   </label>
 
-                  <select
-                    className="form-select"
-                    name="process"
-                    value={
-                      formData.process
-                    }
-                    onChange={
-                      handleChange
-                    }
-                    required
-                  >
-
-                    <option value="">
-                      Select Process
-                    </option>
-
-                    <option value="CNC Machining">
-                      CNC Machining
-                    </option>
-
-                    <option value="3D Printing">
-                      3D Printing
-                    </option>
-
-                    <option value="Injection Molding">
-                      Injection Molding
-                    </option>
-
-                    <option value="Laser Cutting">
-                      Laser Cutting
-                    </option>
-
-                  </select>
+                  <input
+  type="text"
+  className="form-control"
+  value={
+    formData.process ||
+    "Analyzing CAD File..."
+  }
+  readOnly
+/>
 
                 </div>
 
@@ -437,8 +506,45 @@ const handleFileChange = async (e) => {
               </h5>
 
               <h2 className="text-warning fw-bold">
-                ₹{previewPrice}
+                ₹{Number(previewPrice).toFixed(2)}
               </h2>
+
+              {quotePreview && (
+
+  <div className="mt-3">
+
+    <hr />
+
+    <h5>Cost Breakdown</h5>
+
+    <p>
+      <strong>Material Cost:</strong>
+      ₹{quotePreview.materialCost?.toFixed(2)}
+    </p>
+
+    <p>
+      <strong>Manufacturing Cost:</strong>
+      ₹{quotePreview.manufacturingCost?.toFixed(2)}
+    </p>
+
+    <p>
+      <strong>Profit Margin:</strong>
+      ₹{quotePreview.profitMargin?.toFixed(2)}
+    </p>
+
+    <p>
+      <strong>GST:</strong>
+      ₹{quotePreview.gstAmount?.toFixed(2)}
+    </p>
+
+    <h5 className="text-success">
+      Final Amount:
+      ₹{quotePreview.finalAmount?.toFixed(2)}
+    </h5>
+
+  </div>
+
+)}
 
               {generatedPrice > 0 && (
                 <div className="mt-3">
@@ -448,7 +554,7 @@ const handleFileChange = async (e) => {
                   </h6>
 
                   <h4 className="text-success">
-                    ₹{generatedPrice}
+                    ₹{Number(generatedPrice).toFixed(2)}
                   </h4>
 
                 </div>
@@ -465,29 +571,29 @@ const handleFileChange = async (e) => {
     </h5>
 
     <p>
-      <strong>Volume:</strong>{" "}
-      {cadAnalysis.volume}
-    </p>
+  <strong>Volume:</strong>{" "}
+  {Number(cadAnalysis.volume).toFixed(2)} mm³
+</p>
 
-    <p>
-      <strong>Surface Area:</strong>{" "}
-      {cadAnalysis.surfaceArea}
-    </p>
+<p>
+  <strong>Surface Area:</strong>{" "}
+  {Number(cadAnalysis.surfaceArea).toFixed(2)} mm²
+</p>
 
-    <p>
-      <strong>Width:</strong>{" "}
-      {cadAnalysis.width}
-    </p>
+<p>
+  <strong>Width:</strong>{" "}
+  {Number(cadAnalysis.width).toFixed(2)} mm
+</p>
 
-    <p>
-      <strong>Height:</strong>{" "}
-      {cadAnalysis.height}
-    </p>
+<p>
+  <strong>Height:</strong>{" "}
+  {Number(cadAnalysis.height).toFixed(2)} mm
+</p>
 
-    <p>
-      <strong>Depth:</strong>{" "}
-      {cadAnalysis.depth}
-    </p>
+<p>
+  <strong>Depth:</strong>{" "}
+  {Number(cadAnalysis.depth).toFixed(2)} mm
+</p>
 
     <p>
       <strong>Face Count:</strong>{" "}
@@ -504,6 +610,30 @@ const handleFileChange = async (e) => {
       {cadAnalysis.complexityScore}
     </p>
 
+    <p>
+  <strong>Triangle Count:</strong>{" "}
+  {cadAnalysis.triangleCount}
+</p>
+
+<p>
+  <strong>Estimated Machining Time:</strong>{" "}
+  {Number(cadAnalysis.estimatedMachiningTime).toFixed(2)} Hours
+</p>
+
+<p>
+  <strong>Recommended Process:</strong>{" "}
+  {cadAnalysis.recommendedProcess}
+</p>
+
+<p>
+  <strong>Part Category:</strong>{" "}
+  {cadAnalysis.partCategory}
+</p>
+
+
+
+
+
   </div>
 
 )}
@@ -516,7 +646,15 @@ const handleFileChange = async (e) => {
 
       </section>
 
-      <Footer />
+<AddressModal
+    show={showAddressModal}
+    addressData={addressData}
+    handleAddressChange={handleAddressChange}
+    handleSave={saveAddress}
+    handleClose={() => setShowAddressModal(false)}
+/>
+
+<Footer />
     </>
   );
 }

@@ -1,0 +1,13 @@
+.file-cell {
+    position: relative;
+    min-width: 250px;
+}
+
+.download-btn {
+    display: none;
+    margin-top: 8px;
+}
+
+.file-cell:hover .download-btn {
+    display: inline-block;
+}

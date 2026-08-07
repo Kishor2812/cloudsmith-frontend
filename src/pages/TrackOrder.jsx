@@ -1,238 +1,161 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import API from "../services/api";
+import "./TrackOrder.css";
 
 function TrackOrder() {
+  const { id } = useParams();
 
-  const [trackingNumber,
-          setTrackingNumber] =
-          useState("");
+  const [shipment, setShipment] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const [shipment,
-          setShipment] =
-          useState(null);
+  useEffect(() => {
+    loadOrder();
+  }, []);
 
-  const [loading,
-          setLoading] =
-          useState(false);
+  const loadOrder = async () => {
+    try {
+      const response = await API.get(`/orders/tracking/${id}`);
+      setShipment(response.data);
+    } catch (error) {
+      alert("Order Not Found");
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  const searchShipment =
-    async () => {
+  const getProgress = () => {
 
-      if (!trackingNumber) {
+  switch (shipment?.orderStatus) {
 
-        alert(
-          "Enter Tracking Number"
-        );
+    case "Created":
+      return 25;
 
-        return;
-      }
+    case "Quality Check":
+      return 50;
 
-      try {
+    case "Shipped":
+      return 75;
 
-        setLoading(true);
+    case "Delivered":
+      return 100;
 
-        const response =
-          await fetch(
-            `http://localhost:8080/api/shipment/tracking/${trackingNumber}`
-          );
+    default:
+      return 0;
+  }
+};
 
-        if (!response.ok) {
+ const steps = [
+  "Created",
+  "Quality Check",
+  "Shipped",
+  "Delivered",
+];
 
-          throw new Error(
-            "Shipment Not Found"
-          );
-        }
+  const completed = (step) =>
+    steps.indexOf(shipment?.orderStatus) >= steps.indexOf(step);
 
-        const data =
-          await response.json();
+  if (loading)
+    return (
+      <div className="text-center mt-5">
+        <h3>Loading...</h3>
+      </div>
+    );
 
-        setShipment(data);
-
-      } catch (error) {
-
-        console.error(error);
-
-        alert(
-          "Shipment Not Found"
-        );
-
-      } finally {
-
-        setLoading(false);
-
-      }
-    };
+  if (!shipment)
+    return (
+      <div className="text-center mt-5">
+        <h3>Order Not Found</h3>
+      </div>
+    );
 
   return (
+    <div className="container py-5">
 
-    <div
-      className="container py-5"
-      style={{
-        minHeight: "100vh"
-      }}
-    >
-
-      <h1
-        className="text-center mb-5"
-      >
+      <h2 className="text-center text-warning mb-4">
         Track Order
-      </h1>
+      </h2>
 
-      <div
-        className="card shadow p-4"
-      >
+      <div className="card bg-dark text-white border-warning shadow">
 
-        <div className="row">
+        <div className="card-body">
 
-          <div className="col-md-9">
+          <h4 className="text-warning mb-4">
+            Tracking Details
+          </h4>
 
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Enter Tracking Number"
-              value={trackingNumber}
-              onChange={(e) =>
-                setTrackingNumber(
-                  e.target.value
-                )
-              }
-            />
+          <div className="row">
+
+            <div className="col-md-6">
+
+              <p><strong>Order ID :</strong> {shipment.id}</p>
+
+              <p><strong>Quote ID :</strong> {shipment.quoteId}</p>
+
+              <p><strong>Manufacturer :</strong> {shipment.manufacturerName || "Not Assigned"}</p>
+
+              <p><strong>Customer :</strong> {shipment.customerEmail}</p>
+
+            </div>
+
+            <div className="col-md-6">
+
+              <p><strong>Tracking No :</strong> {shipment.trackingNumber || "Not Generated"}</p>
+
+              <p><strong>Courier :</strong> {shipment.courierName || "Not Assigned"}</p>
+
+              <p><strong>Status :</strong> {shipment.orderStatus}</p>
+
+              <p><strong>Delivery :</strong> {shipment.estimatedDeliveryDate || "Pending"}</p>
+
+            </div>
 
           </div>
 
-          <div className="col-md-3">
+          <hr />
 
-            <button
-              className="btn btn-warning w-100"
-              onClick={
-                searchShipment
-              }
+          <h5 className="text-warning">
+            Progress
+          </h5>
+
+          <div className="progress mb-4">
+
+            <div
+              className="progress-bar bg-warning text-dark"
+              style={{ width: `${getProgress()}%` }}
             >
-              Track
-            </button>
+              {getProgress()}%
+            </div>
 
           </div>
+
+          <h5 className="text-warning">
+            Order Timeline
+          </h5>
+
+          <ul className="list-group">
+
+            {steps.map((step) => (
+
+              <li
+                key={step}
+                className={`list-group-item ${
+                  completed(step)
+                    ? "list-group-item-success"
+                    : ""
+                }`}
+              >
+                {step}
+              </li>
+
+            ))}
+
+          </ul>
 
         </div>
 
       </div>
-
-      {loading && (
-
-        <div
-          className="text-center mt-4"
-        >
-          Loading...
-        </div>
-
-      )}
-
-      {shipment && (
-
-        <div
-          className="card shadow mt-4 p-4"
-        >
-
-          <h3>
-            Tracking Details
-          </h3>
-
-          <hr />
-
-          <p>
-            <strong>
-              Tracking Number:
-            </strong>
-            {" "}
-            {shipment.trackingNumber}
-          </p>
-
-          <p>
-            <strong>
-              Courier:
-            </strong>
-            {" "}
-            {shipment.courierName}
-          </p>
-
-          <p>
-            <strong>
-              Status:
-            </strong>
-            {" "}
-            {shipment.shipmentStatus}
-          </p>
-
-          <hr />
-
-          <div>
-
-            <div
-              className={
-                shipment.shipmentStatus
-                  === "Shipped"
-                ||
-                shipment.shipmentStatus
-                  === "In Transit"
-                ||
-                shipment.shipmentStatus
-                  === "Out For Delivery"
-                ||
-                shipment.shipmentStatus
-                  === "Delivered"
-                  ? "text-success"
-                  : ""
-              }
-            >
-              ✔ Shipped
-            </div>
-
-            <div
-              className={
-                shipment.shipmentStatus
-                  === "In Transit"
-                ||
-                shipment.shipmentStatus
-                  === "Out For Delivery"
-                ||
-                shipment.shipmentStatus
-                  === "Delivered"
-                  ? "text-success"
-                  : ""
-              }
-            >
-              ✔ In Transit
-            </div>
-
-            <div
-              className={
-                shipment.shipmentStatus
-                  === "Out For Delivery"
-                ||
-                shipment.shipmentStatus
-                  === "Delivered"
-                  ? "text-success"
-                  : ""
-              }
-            >
-              ✔ Out For Delivery
-            </div>
-
-            <div
-              className={
-                shipment.shipmentStatus
-                  === "Delivered"
-                  ? "text-success"
-                  : ""
-              }
-            >
-              ✔ Delivered
-            </div>
-
-          </div>
-
-        </div>
-
-      )}
 
     </div>
   );

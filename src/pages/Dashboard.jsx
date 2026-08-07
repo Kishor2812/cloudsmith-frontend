@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import API from "../services/api";
-import Navbar from "../components/navbar/Navbar";
+import Sidebar from "../components/dashboard/Sidebar";
 
 function Dashboard() {
 
@@ -11,59 +11,48 @@ function Dashboard() {
   const [rejected, setRejected] = useState(0);
   const [pending, setPending] = useState(0);
 
-  useEffect(() => {
+ useEffect(() => {
 
-    const loadDashboard = async () => {
+  const loadDashboard = async () => {
 
-      try {
+    try {
 
-        const email =
-          localStorage.getItem("email");
+      const email = localStorage.getItem("email");
 
-        const [
-          totalRes,
-          approvedRes,
-          rejectedRes,
-          pendingRes
-        ] = await Promise.all([
+const response = await API.get(
+    `/dashboard/stats?email=${email}`
+);
 
-          API.get(
-            `/api/quotes/user-count/${email}`
-          ),
+      setTotalQuotes(
+  response.data.totalQuotes
+);
 
-          API.get(
-            `/api/quotes/approved-count/${email}`
-          ),
+setApproved(
+  response.data.approvedQuotes
+);
 
-          API.get(
-            `/api/quotes/rejected-count/${email}`
-          ),
+setRejected(
+  response.data.rejectedQuotes
+);
 
-          API.get(
-            `/api/quotes/pending-count/${email}`
-          )
+setPending(
+  response.data.pendingQuotes
+);
 
-        ]);
+    } catch (error) {
 
-        setTotalQuotes(totalRes.data);
-        setApproved(approvedRes.data);
-        setRejected(rejectedRes.data);
-        setPending(pendingRes.data);
+      console.error(error);
 
-      } catch (error) {
+    } finally {
 
-        console.error(error);
+      setLoading(false);
 
-      } finally {
+    }
+  };
 
-        setLoading(false);
+  loadDashboard();
 
-      }
-    };
-
-    loadDashboard();
-
-  }, []);
+}, []);
 
   if (loading) {
 
@@ -82,19 +71,26 @@ function Dashboard() {
   }
 
   return (
-    <>
-      <Navbar />
+  <div
+    className="d-flex"
+    style={{
+        background:"#000",
+        minHeight:"100vh",
+        color:"#fff"
+    }}
+>
 
-      <div
+    <Sidebar />
+
+    <div
+        className="container-fluid p-4"
         style={{
-          background: "#000",
-          minHeight: "100vh",
-          color: "#fff",
-          padding: "40px"
+            background:"#000",
+            minHeight:"100vh",
+            color:"#fff"
         }}
-      >
-
-        <div className="container">
+    >
+        <div>
 
           <h1
             className="fw-bold mb-4"
@@ -233,10 +229,11 @@ function Dashboard() {
             </div>
           </div>
 
-        </div>
+             </div>
 
       </div>
-    </>
+
+    </div>
   );
 }
 

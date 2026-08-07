@@ -5,6 +5,7 @@ import API from "../services/api";
 function Profile() {
 
   const [user, setUser] = useState(null);
+  const [address, setAddress] = useState(null);
   const [editing, setEditing] = useState(false);
 
   useEffect(() => {
@@ -22,10 +23,15 @@ function Profile() {
 
       const response =
         await API.get(
-          `/api/auth/profile?email=${email}`
-        );
+    `/auth/profile?email=${email}`
+);
 
       setUser(response.data);
+      const addressResponse = await API.get(
+    `/address?email=${email}`
+);
+
+setAddress(addressResponse.data);
 
     } catch (error) {
 
@@ -34,31 +40,46 @@ function Profile() {
     }
   };
 
-  const saveProfile = async () => {
+ const saveProfile = async () => {
 
-    try {
+  if (!/^[6-9][0-9]{9}$/.test(user.mobile)) {
 
-      await API.put(
-        "/api/auth/update-profile",
-        user
-      );
+    alert("Enter a valid mobile number");
 
-      alert(
-        "Profile Updated Successfully"
-      );
+    return;
 
-      setEditing(false);
+  }
 
-    } catch (error) {
+  try {
 
-      console.error(error);
+    await API.put(
+      "/auth/update-profile",
+      user
+    );
 
-      alert(
-        "Update Failed"
-      );
+    await API.post(
+  "/address/save",
+  address
+);
 
-    }
-  };
+    alert(
+      "Profile Updated Successfully"
+    );
+
+    setEditing(false);
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert(
+      "Update Failed"
+    );
+
+  }
+};
+
+  
 
   if (!user) {
 
@@ -220,29 +241,203 @@ function Profile() {
 
             </div>
 
+            <div className="row mt-4">
+
+  <div className="col-md-6">
+
+    <h5>Company</h5>
+
+    {editing ? (
+  <input
+    className="form-control mb-3"
+    value={address?.company || ""}
+    onChange={(e) =>
+      setAddress({
+        ...address,
+        company: e.target.value
+      })
+    }
+  />
+) : (
+  <p>{address?.company || "-"}</p>
+)}
+
+  </div>
+
+  <div className="col-md-6">
+
+    <h5>Address Line 1</h5>
+
+   {editing ? (
+  <input
+    className="form-control mb-3"
+    value={address?.addressLine1 || ""}
+    onChange={(e) =>
+      setAddress({
+        ...address,
+        addressLine1: e.target.value
+      })
+    }
+  />
+) : (
+  <p>{address?.addressLine1 || "-"}</p>
+)}
+
+  </div>
+
+</div>
+
+<div className="row">
+
+  <div className="col-md-6">
+
+    <h5>Address Line 2</h5>
+
+    {editing ? (
+  <input
+    className="form-control mb-3"
+    value={address?.addressLine2 || ""}
+    onChange={(e) =>
+      setAddress({
+        ...address,
+        addressLine2: e.target.value
+      })
+    }
+  />
+) : (
+  <p>{address?.addressLine2 || "-"}</p>
+)}
+
+  </div>
+
+  <div className="col-md-6">
+
+    <h5>City</h5>
+
+    {editing ? (
+  <input
+    className="form-control mb-3"
+    value={address?.city || ""}
+    onChange={(e) =>
+      setAddress({
+        ...address,
+        city: e.target.value
+      })
+    }
+  />
+) : (
+  <p>{address?.city || "-"}</p>
+)}
+
+  </div>
+
+</div>
+
+<div className="row">
+
+  <div className="col-md-4">
+
+    <h5>State</h5>
+
+    {editing ? (
+  <input
+    className="form-control mb-3"
+    value={address?.state || ""}
+    onChange={(e) =>
+      setAddress({
+        ...address,
+        state: e.target.value
+      })
+    }
+  />
+) : (
+  <p>{address?.state || "-"}</p>
+)}
+
+  </div>
+
+  <div className="col-md-4">
+
+    <h5>Country</h5>
+
+{editing ? (
+  <input
+    className="form-control mb-3"
+    value={address?.country || ""}
+    onChange={(e) =>
+      setAddress({
+        ...address,
+        country: e.target.value
+      })
+    }
+  />
+) : (
+  <p>{address?.country || "-"}</p>
+)}
+
+  </div>
+
+  <div className="col-md-4">
+
+    <h5>Pincode</h5>
+
+    {editing ? (
+  <input
+    className="form-control mb-3"
+    value={address?.pincode || ""}
+    onChange={(e) =>
+      setAddress({
+        ...address,
+        pincode: e.target.value
+      })
+    }
+  />
+) : (
+  <p>{address?.pincode || "-"}</p>
+)}
+
+  </div>
+
+</div>
+
             <hr />
 
             {editing ? (
 
-              <button
-                className="btn btn-warning"
-                onClick={saveProfile}
-              >
-                Save Changes
-              </button>
+  <>
+    <button
+      className="btn btn-warning"
+      onClick={saveProfile}
+    >
+      Save Changes
+    </button>
 
-            ) : (
+    <button
+      className="btn btn-secondary ms-2"
+      onClick={() => {
 
-              <button
-                className="btn btn-warning"
-                onClick={() =>
-                  setEditing(true)
-                }
-              >
-                Edit Profile
-              </button>
+        setEditing(false);
 
-            )}
+        loadProfile();
+
+      }}
+    >
+      Cancel
+    </button>
+  </>
+
+) : (
+
+  <button
+    className="btn btn-warning"
+    onClick={() =>
+      setEditing(true)
+    }
+  >
+    Edit Profile
+  </button>
+
+)}
 
           </div>
 

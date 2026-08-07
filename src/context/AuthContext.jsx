@@ -31,20 +31,28 @@ function AuthProvider({
 
   }, []);
 
-  const login = (
-    userData
-  ) => {
 
-    setUser(userData);
+  const login = (
+  userData,
+  token
+) => {
+
+  setUser(userData);
+
+  localStorage.setItem(
+    "cloudsmithUser",
+    JSON.stringify(userData)
+  );
+
+  if (token) {
 
     localStorage.setItem(
-      "cloudsmithUser",
-      JSON.stringify(
-        userData
-      )
+      "token",
+      token
     );
 
-  };
+  }
+};
 
   const logout = () => {
 

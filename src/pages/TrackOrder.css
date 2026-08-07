@@ -1,0 +1,149 @@
+/* ===========================
+   Track Order Page
+=========================== */
+
+body {
+    background: #000;
+}
+
+/* ===========================
+   Card
+=========================== */
+
+.card {
+    border-radius: 12px;
+    color: #fff;
+}
+
+.card hr {
+    border-color: rgba(255,255,255,0.2);
+}
+
+/* ===========================
+   Progress Bar
+=========================== */
+
+.progress {
+    height: 28px;
+    border-radius: 20px;
+    background: #333;
+    overflow: hidden;
+}
+
+.progress-bar {
+    background: #ffbe0b !important;
+    color: #000;
+    font-weight: bold;
+    transition: width 0.6s ease;
+}
+
+/* ===========================
+   Timeline
+=========================== */
+
+.timeline {
+    position: relative;
+    margin:30px auto;
+
+max-width:450px;
+}
+
+.timeline-item {
+    position: relative;
+    padding-left: 45px;
+    margin-bottom: 30px;
+    color: #999;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+/* Vertical Line */
+
+.timeline-item::before {
+    content: "";
+    position: absolute;
+    left: 10px;
+    top: 20px;
+    width: 2px;
+    height: 38px;
+    background: #555;
+}
+
+.timeline-item:last-child::before {
+    display: none;
+}
+
+/* Circle */
+
+.circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #666;
+    border: 3px solid #999;
+    position: absolute;
+    left: 0;
+    top: 0;
+    transition: all 0.3s ease;
+}
+
+/* Completed Step */
+
+.timeline-item.completed {
+    color: #28a745;
+    font-weight: bold;
+}
+
+.timeline-item.completed::before {
+    background: #28a745;
+}
+
+.timeline-item.completed .circle {
+    background: #28a745;
+    border-color: #28a745;
+}
+
+/* Hover Effect */
+
+.timeline-item:hover {
+    transform: translateX(5px);
+}
+
+/* ===========================
+   Badge
+=========================== */
+
+.badge {
+    font-size: 14px;
+    padding: 8px 12px;
+}
+
+/* ===========================
+   Responsive
+=========================== */
+
+@media (max-width:768px){
+
+    .timeline{
+        margin-left:5px;
+    }
+
+   .timeline-item{
+
+padding-left:35px;
+
+margin-bottom:18px;
+
+font-size:15px;
+
+}
+
+   .circle{
+
+width:16px;
+
+height:16px;
+
+}
+
+}

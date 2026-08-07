@@ -100,10 +100,12 @@ function Hero() {
             >
 
               <img
-                src="https://images.unsplash.com/photo-1565043589221-1a6fd9ae45c7?q=80&w=1200&auto=format&fit=crop"
+                src="https://images.unsplash.com/photo-1585201731775-0597e1be4bfb?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8Y25jJTIwbWFjaGluaW5nfGVufDB8fDB8fHww"
                 alt="CloudSmith Manufacturing"
                 className="hero-image"
               />
+
+
 
             </motion.div>
 

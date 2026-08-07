@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import AdminSidebar from "../components/admin/AdminSidebar";
 import API from "../services/api";
+import "./AdminQuotes.css";
 
 function AdminQuotes() {
 
@@ -18,7 +19,7 @@ function AdminQuotes() {
     try {
 
       const response =
-        await API.get("/api/quotes/all");
+        await API.get("/quotes/all");
 
       setQuotes(response.data);
 
@@ -44,13 +45,14 @@ function AdminQuotes() {
 
       if (status === "Approved") {
 
-        url =
-          `/api/quotes/approve/${id}`;
+        
+          url =
+`/quotes/approve/${id}`;
 
       } else {
 
         url =
-          `/api/quotes/reject/${id}`;
+`/quotes/reject/${id}`;
 
       }
 
@@ -82,8 +84,9 @@ function AdminQuotes() {
       }
 
       await API.put(
-        `/api/quotes/price/${id}/${price}`
-      );
+    `/quotes/price/${id}/${price}`
+);
+
 
       alert(
         "Price Saved Successfully"
@@ -97,6 +100,45 @@ function AdminQuotes() {
 
     }
   };
+
+  const downloadFile = async (fileName) => {
+
+  try {
+
+    const response = await API.get(
+      `/upload/download/${fileName}`,
+      {
+        responseType: "blob"
+      }
+    );
+
+    const url = window.URL.createObjectURL(
+      new Blob([response.data])
+    );
+
+    const link = document.createElement("a");
+
+    link.href = url;
+    link.download = fileName;
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    link.remove();
+
+    window.URL.revokeObjectURL(url);
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert("Download Failed");
+
+  }
+
+};
+
 
   const filteredQuotes =
     quotes.filter(
@@ -202,7 +244,20 @@ function AdminQuotes() {
 
                         <td>{quote.id}</td>
                         <td>{quote.email}</td>
-                        <td>{quote.fileName}</td>
+                        <td className="file-cell">
+
+  <span>{quote.fileName}</span>
+
+  <button
+    className="btn btn-primary btn-sm download-btn"
+    onClick={() =>
+      downloadFile(quote.fileName)
+    }
+  >
+    Download
+  </button>
+
+</td>
                         <td>{quote.material}</td>
                         <td>{quote.processName}</td>
                         <td>{quote.quantity}</td>
@@ -237,9 +292,11 @@ function AdminQuotes() {
 
                         <td>
 
-                          {quote.price
-                            ? `₹${quote.price}`
-                            : "Not Set"}
+                          {quote.finalAmount
+                          ? `₹${quote.finalAmount.toFixed(2)}`
+                          : quote.price
+                          ? `₹${quote.price}`
+                          : "Not Set"}
 
                           <input
                             type="number"
@@ -287,8 +344,8 @@ function AdminQuotes() {
                         <td>
 
                           <span className="badge bg-info">
-                            {quote.orderStatus}
-                          </span>
+    {quote.orderStatus || "Created"}
+</span>
 
                         </td>
 

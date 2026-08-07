@@ -3,7 +3,8 @@ import React, {
   useContext
 } from "react";
 
-import axios from "axios";
+//import axios from "axios";
+import api from "../services/api";
 
 import {
   useNavigate,
@@ -51,59 +52,57 @@ function Login() {
 
     try {
 
+      // const response =
+      //   await axios.post(
+      //     "http://localhost:8080/api/auth/login",
+      //     formData
+      //   );
+  
+
       const response =
-        await axios.post(
-          "http://localhost:8080/api/auth/login",
-          formData
-        );
-
+  await api.post(
+    "/auth/login",
+    formData
+  );
+  
       localStorage.setItem(
-        "token",
-        response.data
-      );
+  "email",
+  formData.email
+);
 
-      localStorage.setItem(
-        "email",
-        formData.email
-      );
-
-      login({
-        email:
-          formData.email
-      });
+login(
+  {
+    email: response.data.email,
+    role: response.data.role
+  },
+  response.data.token
+);
 
       alert(
         "Login Successful"
       );
 
-      navigate(
-        "/dashboard"
-      );
+      if (response.data.role === "ADMIN") {
+    navigate("/admin-quotes");
+} else {
+    navigate("/dashboard");
+}
 
-    } catch (error) {
+    }catch (error) {
 
-      if (
-        error.response
-      ) {
+  console.error(error);
 
-        alert(
-          typeof error.response.data
-            === "string"
-            ? error.response.data
-            : JSON.stringify(
-                error.response.data
-              )
-        );
+  if (error.response?.data?.message) {
 
-      } else {
+    alert(error.response.data.message);
 
-        alert(
-          "Server Connection Failed"
-        );
+  } else {
 
-      }
+    alert("Invalid email or password.");
 
-    } finally {
+  }
+
+} finally {
 
       setLoading(false);
 

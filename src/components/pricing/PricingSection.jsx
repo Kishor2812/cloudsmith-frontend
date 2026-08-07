@@ -8,6 +8,8 @@ import {
 
 import "./PricingSection.css";
 
+import { Link } from "react-router-dom";
+
 function PricingSection() {
 
   const factors = [
@@ -85,12 +87,19 @@ function PricingSection() {
 
         <div className="text-center mt-5">
 
-          <a
+          {/* <a
             href="/quote"
             className="pricing-btn"
           >
             Request a Quote
-          </a>
+          </a> */}
+
+          <Link
+    to="/quote"
+    className="pricing-btn"
+>
+    Request a Quote
+</Link>
 
         </div>
 

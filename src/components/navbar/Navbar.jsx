@@ -94,14 +94,28 @@ function Navbar() {
               </Link>
             </li>
 
-            <li className="nav-item">
-              <Link
-                className="nav-link"
-                to="/quote"
-              >
-                Quote
-              </Link>
-            </li>
+           <li className="nav-item">
+  <Link
+    className="nav-link"
+    to="#"
+    onClick={(e) => {
+
+      e.preventDefault();
+
+      if (!user) {
+
+        navigate("/login");
+
+        return;
+      }
+
+      navigate("/quote");
+
+    }}
+  >
+    Quote
+  </Link>
+</li>
 
           </ul>
 
@@ -153,17 +167,27 @@ function Navbar() {
 
             )}
 
-            <Link
-              to="/quote"
-              className="quote-btn"
-            >
-              Quotation Generator
+          <Link
+  to="#"
+  className="quote-btn"
+  onClick={(e) => {
 
-              <FaArrowRight
-                className="ms-2"
-              />
+    e.preventDefault();
 
-            </Link>
+    if (!user) {
+
+      navigate("/login");
+
+      return;
+    }
+
+    navigate("/quote");
+
+  }}
+>
+  Quotation Generator
+  <FaArrowRight className="ms-2" />
+</Link>
 
           </div>
 

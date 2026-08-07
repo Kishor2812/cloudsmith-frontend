@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import AdminSidebar from "../components/admin/AdminSidebar";
+import API from "../services/api";
 
 import {
   BarChart,
@@ -21,25 +22,30 @@ function AdminAnalytics() {
     paidOrders: 0
   });
 
-  useEffect(() => {
+useEffect(() => {
 
-    fetch(
-      "http://localhost:8080/api/analytics/dashboard"
-    )
-      .then((res) => res.json())
-      .then((data) => {
+  loadAnalytics();
 
-        setStats(data);
+}, []);
 
-      })
-      .catch((error) => {
+const loadAnalytics = async () => {
 
-        console.error(error);
+  try {
 
-      });
+    const response =
+      await API.get(
+        "/analytics/dashboard"
+      );
 
-  }, []);
+    setStats(response.data);
 
+  } catch (error) {
+
+    console.error(error);
+
+  }
+
+};
   const chartData = [
     {
       name: "Approved",
@@ -128,7 +134,7 @@ function AdminAnalytics() {
                 <h5>Total Revenue</h5>
 
                 <h2 className="text-success">
-                  ₹{stats.revenue}
+                  ₹{Number(stats.revenue).toLocaleString()}
                 </h2>
 
               </div>

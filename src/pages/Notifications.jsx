@@ -22,8 +22,8 @@ function Notifications() {
 
       const response =
         await API.get(
-          `/api/notifications/${email}`
-        );
+    `/notifications/${email}`
+);
 
       setNotifications(response.data);
 
@@ -92,7 +92,7 @@ function Notifications() {
               color: "#000"
             }}
           >
-            <h4 className="mb-0">
+            <h4 className="mb-0"> 
               Recent Updates
             </h4>
           </div>

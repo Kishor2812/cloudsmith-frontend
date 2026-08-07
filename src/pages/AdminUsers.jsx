@@ -17,7 +17,7 @@ function AdminUsers() {
     try {
 
       const response =
-        await API.get("/api/auth/all-users");
+        await API.get("/auth/all-users");
 
       setUsers(response.data);
 
@@ -43,9 +43,9 @@ function AdminUsers() {
 
     try {
 
-      await API.delete(
-        `/api/auth/delete-user/${id}`
-      );
+     await API.delete(
+    `/auth/delete-user/${id}`
+);
 
       alert("User Deleted");
 

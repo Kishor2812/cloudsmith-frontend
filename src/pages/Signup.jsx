@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import axios from "axios";
+//import axios from "axios";
+import api from "../services/api";
 import {
   Link,
   useNavigate
@@ -43,9 +44,13 @@ function Signup() {
 
     try {
 
-      await axios.post(
-        `http://localhost:8080/api/auth/send-otp?email=${email}`
-      );
+      // await axios.post(
+      //   `http://localhost:8080/api/auth/send-otp?email=${email}`
+      // );
+
+      await api.post(
+  `/auth/send-otp?email=${email}`
+);
 
       alert(
         "OTP Sent Successfully"
@@ -53,11 +58,31 @@ function Signup() {
 
     } catch (error) {
 
-      alert(
-        "Failed To Send OTP"
-      );
+  if (error.response) {
+
+    const data = error.response.data;
+
+    if (typeof data === "string") {
+
+      alert(data);
+
+    } else if (data.message) {
+
+      alert(data.message);
+
+    } else {
+
+      alert("Failed To Send OTP");
 
     }
+
+  } else {
+
+    alert("Server Connection Failed");
+
+  }
+
+}
   };
 
   const verifyOtp = async () => {
@@ -65,9 +90,13 @@ function Signup() {
     try {
 
       const response =
-        await axios.post(
-          `http://localhost:8080/api/auth/verify-otp?email=${email}&otp=${otp}`
-        );
+        // await axios.post(
+        //   `http://localhost:8080/api/auth/verify-otp?email=${email}&otp=${otp}`
+        // );
+
+        await api.post(
+  `/auth/verify-otp?email=${email}&otp=${otp}`
+);
 
       if (
         response.data ===
@@ -82,11 +111,31 @@ function Signup() {
 
     } catch (error) {
 
-      alert(
-        "OTP Verification Failed"
-      );
+  if (error.response) {
+
+    const data = error.response.data;
+
+    if (typeof data === "string") {
+
+      alert(data);
+
+    } else if (data.message) {
+
+      alert(data.message);
+
+    } else {
+
+      alert("OTP Verification Failed");
 
     }
+
+  } else {
+
+    alert("Server Connection Failed");
+
+  }
+
+}
   };
 
   const register =
@@ -139,10 +188,15 @@ function Signup() {
 
       };
 
-      await axios.post(
-        "http://localhost:8080/api/auth/register",
-        user
-      );
+      // await axios.post(
+      //   "http://localhost:8080/api/auth/register",
+      //   user
+      // );
+
+      await api.post(
+  "/auth/register",
+  user
+);
 
       alert(
         "Account Created Successfully"
@@ -152,28 +206,35 @@ function Signup() {
 
     } catch (error) {
 
-      if (
-        error.response
-      ) {
+       if (error.response) {
 
-        alert(
-          typeof error.response.data
-            === "string"
-            ? error.response.data
-            : JSON.stringify(
-                error.response.data
-              )
-        );
+    const data = error.response.data;
 
-      } else {
+    if (typeof data === "string") {
 
-        alert(
-          "Registration Failed"
-        );
+      alert(data);
 
-      }
+    } else if (data.message) {
 
-    } finally {
+      alert(data.message);
+
+    } else if (data.error) {
+
+      alert(data.error);
+
+    } else {
+
+      alert("Registration Failed");
+
+    }  
+
+  } else {
+
+    alert("Server Connection Failed");
+
+  }
+
+}finally {
 
       setLoading(false);
 
@@ -246,12 +307,20 @@ function Signup() {
           }
         />
 
-        <button
+        {/* <button
           className="btn btn-warning w-100 mb-3"
           onClick={sendOtp}
         >
           Send OTP
-        </button>
+        </button> */}
+
+        <button
+  className="btn btn-warning w-100 mb-3"
+  onClick={sendOtp}
+  disabled={otpVerified}
+>
+  Send OTP
+</button>
 
         <input
           className="form-control mb-3"
@@ -264,12 +333,20 @@ function Signup() {
           }
         />
 
-        <button
+        {/* <button
           className="btn btn-warning w-100 mb-3"
           onClick={verifyOtp}
         >
           Verify OTP
-        </button>
+        </button> */}
+
+        <button
+  className="btn btn-warning w-100 mb-3"
+  onClick={verifyOtp}
+  disabled={otpVerified}
+>
+  Verify OTP
+</button>
 
         {otpVerified && (
 

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import API from "../services/api";
 
 function ManufacturerDashboard() {
 
@@ -15,13 +16,12 @@ function ManufacturerDashboard() {
 
     try {
 
-      const response = await fetch(
-        `http://localhost:8080/api/quotes/manufacturer/${manufacturerId}`
-      );
+     const response =
+    await API.get(
+        `/quotes/manufacturer/${manufacturerId}`
+    );
 
-      const data = await response.json();
-
-      setOrders(data);
+setOrders(response.data);
 
     } catch (error) {
 
@@ -33,32 +33,49 @@ function ManufacturerDashboard() {
   const updateStatus = async (
     quoteId,
     status
-  ) => {
+) => {
 
     try {
 
-      await fetch(
-        `http://localhost:8080/api/quotes/order-status/${quoteId}/${status}`,
-        {
-          method: "PUT"
+        if (!status) {
+            return;
         }
-      );
 
-      alert(
-        "Status Updated Successfully"
-      );
+        let url = "";
 
-      loadOrders();
+        if (status === "Manufacturing") {
+
+            url = `/orders/manufacturing/${quoteId}`;
+
+        } else if (status === "Quality Check") {
+
+            url = `/orders/qc/${quoteId}`;
+
+        } else if (status === "Shipped") {
+
+            url = `/orders/ship/${quoteId}`;
+
+        } else if (status === "Delivered") {
+
+            url = `/orders/deliver/${quoteId}`;
+
+        }
+
+        await API.put(url);
+
+        alert("Status Updated Successfully");
+
+        loadOrders();
 
     } catch (error) {
 
-      console.error(error);
+        console.error(error);
 
-      alert(
-        "Failed To Update Status"
-      );
+        alert("Failed To Update Status");
+
     }
-  };
+
+};
 
   return (
 
@@ -135,14 +152,14 @@ function ManufacturerDashboard() {
                       <td>{order.quantity}</td>
 
                       <td>
-                        ₹{order.price}
+                        ₹{order.finalAmount || order.price || 0}
                       </td>
 
                       <td>
 
                         <span className="badge bg-info">
 
-                          {order.orderStatus}
+                          {order.orderStatus || "Assigned"}
 
                         </span>
 
@@ -160,12 +177,12 @@ function ManufacturerDashboard() {
                           }
                         >
 
-                          <option>
+                          <option value="">
                             Change Status
                           </option>
 
-                          <option value="In Production">
-                            In Production
+                          <option value="Manufacturing">
+                            Manufacturing
                           </option>
 
                           <option value="Quality Check">

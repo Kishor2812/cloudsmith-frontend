@@ -24,9 +24,13 @@ function FileManager() {
     try {
 
       const response =
+        // await API.get(
+        //   `/api/files/${email}`
+        // );
+
         await API.get(
-          `/api/files/${email}`
-        );
+    `/files/${email}`
+);
 
       setFiles(response.data);
 
@@ -65,8 +69,11 @@ function FileManager() {
         email
       );
 
+      // await API.post(
+      //   "/api/upload",
+
       await API.post(
-        "/api/upload",
+    "/upload",
         formData,
         {
           headers: {
@@ -103,9 +110,13 @@ function FileManager() {
 
     try {
 
+      // await API.delete(
+      //   `/api/files/delete/${id}`
+      // );
+
       await API.delete(
-        `/api/files/delete/${id}`
-      );
+    `/files/delete/${id}`
+);
 
       loadFiles();
 

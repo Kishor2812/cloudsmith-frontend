@@ -17,7 +17,7 @@ function AdminOrders() {
     try {
 
       const response =
-        await API.get("/api/quotes/all");
+        await API.get("/quotes/all");
 
       const filteredOrders =
         response.data.filter(
@@ -47,8 +47,8 @@ function AdminOrders() {
     try {
 
       await API.put(
-        `/api/quotes/order-status/${id}/${status}`
-      );
+    `/quotes/order-status/${id}/${status}`
+);
 
       fetchOrders();
 
@@ -58,6 +58,22 @@ function AdminOrders() {
 
     }
   };
+
+  const markAsPaid = async (id) => {
+
+  try {
+
+    await API.put(`/orders/payment/${id}`);
+
+    fetchOrders();
+
+  } catch (error) {
+
+    console.error(error);
+
+  }
+
+};
 
   const filteredOrders =
     orders.filter((order) =>
@@ -137,6 +153,8 @@ function AdminOrders() {
                     <th>Quantity</th>
                     <th>Quote Status</th>
                     <th>Payment</th>
+                     <th>Mark Paid</th>
+
                     <th>Order Status</th>
                     <th>Actions</th>
                   </tr>
@@ -189,9 +207,24 @@ function AdminOrders() {
 
                         <td>
 
+  {order.paymentStatus === "Pending" && (
+
+    <button
+      className="btn btn-success btn-sm"
+      onClick={() => markAsPaid(order.id)}
+    >
+      Paid
+    </button>
+
+  )}
+
+</td>
+
+                        <td>
+
                           <span className="badge bg-info">
-                            {order.orderStatus}
-                          </span>
+    {order.orderStatus || "Created"}
+</span>
 
                         </td>
 

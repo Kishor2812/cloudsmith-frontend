@@ -46,7 +46,11 @@ function AppRoutes() {
         <Route path="/admin-users" element={<AdminUsers />} />
         <Route path="/admin-analytics" element={<AdminAnalytics />}/>
         <Route path="/manufacturer" element={<ManufacturerDashboard />}/>
-        <Route path="/track-order" element={<TrackOrder />}/>
+        <Route path="/track-order" element={<TrackOrder />} />
+<Route path="/track-order/:id" element={<TrackOrder />} />
+
+
+        
 
       </Routes>
     </BrowserRouter>

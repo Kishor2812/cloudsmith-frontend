@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import AdminSidebar from "../components/admin/AdminSidebar";
+import API from "../services/api";
 
 function AdminDashboard() {
 
@@ -17,58 +18,77 @@ function AdminDashboard() {
 
   useEffect(() => {
 
-    Promise.all([
-      fetch("http://localhost:8080/api/quotes/count")
-        .then(res => res.json()),
+  loadDashboard();
 
-      fetch("http://localhost:8080/api/quotes/approved-count")
-        .then(res => res.json()),
+}, []);
 
-      fetch("http://localhost:8080/api/quotes/rejected-count")
-        .then(res => res.json()),
+const loadDashboard = async () => {
 
-      fetch("http://localhost:8080/api/quotes/pending-count")
-        .then(res => res.json()),
+  try {
 
-      fetch("http://localhost:8080/api/quotes/all")
-        .then(res => res.json())
+    const [
 
-    ])
-      .then(([total, approved, rejected, pending, quotes]) => {
+      totalRes,
+      approvedRes,
+      rejectedRes,
+      pendingRes,
+      quotesRes
 
-        setTotalQuotes(total);
-        setApproved(approved);
-        setRejected(rejected);
-        setPending(pending);
-        setQuotes(quotes);
+    ] = await Promise.all([
 
-        const revenue =
-  quotes
-    .filter(
-      q => q.paymentStatus === "Paid"
-    )
-    .reduce(
-      (sum, q) =>
-        sum + (q.price || 0),
-      0
-    );
+      API.get("/quotes/count"),
 
-const paid =
-  quotes.filter(
-    q => q.paymentStatus === "Paid"
-  ).length;
+      API.get("/quotes/approved-count"),
 
-setTotalRevenue(revenue);
-setPaidOrders(paid);
+      API.get("/quotes/rejected-count"),
 
-        setLoading(false);
-      })
-      .catch(error => {
-        console.error(error);
-        setLoading(false);
-      });
+      API.get("/quotes/pending-count"),
 
-  }, []);
+      API.get("/quotes/all")
+
+    ]);
+
+    setTotalQuotes(totalRes.data);
+
+    setApproved(approvedRes.data);
+
+    setRejected(rejectedRes.data);
+
+    setPending(pendingRes.data);
+
+    setQuotes(quotesRes.data);
+
+    const revenue =
+      quotesRes.data
+        .filter(
+          q => q.paymentStatus === "Paid"
+        )
+        .reduce(
+          (sum, q) =>
+            sum + (q.finalAmount || q.price || 0),
+          0
+        );
+
+    const paid =
+      quotesRes.data.filter(
+        q => q.paymentStatus === "Paid"
+      ).length;
+
+    setTotalRevenue(revenue);
+
+    setPaidOrders(paid);
+
+  } catch (error) {
+
+    console.error(error);
+
+  } finally {
+
+    setLoading(false);
+
+  }
+
+}; 
 
   if (loading) {
     return (
@@ -195,7 +215,7 @@ setPaidOrders(paid);
     <div className="card-body text-center">
       <h5>Total Revenue</h5>
       <h2 className="text-info">
-        ₹{totalRevenue}
+        ₹{Number(totalRevenue).toLocaleString()}
       </h2>
     </div>
   </div>
@@ -265,19 +285,19 @@ setPaidOrders(paid);
                 <thead>
 
                   <tr>
-                    <th>ID</th>
-<th>ID</th>
-<th>Invoice</th>
-<th>Email</th>
-<th>File Name</th>
-<th>Material</th>
-<th>Process</th>
-<th>Qty</th>
-<th>Factor</th>
-<th>Delivery</th>
-<th>Price</th>
-<th>Status</th>
-<th>Payment</th>
+                    
+                  <th>ID</th>
+                  <th>Invoice</th>
+                  <th>Email</th>
+                  <th>File Name</th>
+                  <th>Material</th>
+                  <th>Process</th>
+                  <th>Qty</th>
+                  <th>Factor</th>
+                  <th>Delivery</th>
+                  <th>Price</th>
+                  <th>Status</th>
+                  <th>Payment</th>
                   </tr>
 
                 </thead>

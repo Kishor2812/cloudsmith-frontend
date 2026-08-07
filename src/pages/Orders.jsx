@@ -22,8 +22,8 @@ function Orders() {
 
       const response =
         await API.get(
-          `/api/quotes/${email}`
-        );
+   `/quotes/customer/${email}`
+);
 
       const validOrders =
         response.data.filter(
@@ -121,6 +121,7 @@ function Orders() {
                     <th>Quote Status</th>
                     <th>Payment</th>
                     <th>Order Status</th>
+                    <th>Track</th>
                   </tr>
 
                 </thead>
@@ -178,40 +179,58 @@ function Orders() {
                           </span>
 
                         </td>
+                        <td>
+
+                        {order.orderStatus === "Created" && (
+                        <span className="badge bg-secondary">
+                        Created
+                        </span>
+                        )}
+
+                        {order.orderStatus === "Assigned" && (
+                        <span className="badge bg-info">
+                        Assigned
+                        </span>
+                        )}
+
+                        {order.orderStatus === "Manufacturing" && (
+                        <span className="badge bg-warning text-dark">
+                        Manufacturing
+                        </span>
+                        )}
+
+                        {order.orderStatus === "Quality Check" && (
+                        <span className="badge bg-primary">
+                        Quality Check
+                        </span>
+                        )}
+
+                        {order.orderStatus === "Shipped" && (
+                        <span className="badge bg-success">
+                        Shipped
+                        </span>
+                        )}
+
+                        {order.orderStatus === "Delivered" && (
+                        <span className="badge bg-dark">
+                        Delivered
+                        </span>
+                        )}
+
+                        </td>
 
                         <td>
 
-                          {order.orderStatus === "Waiting" && (
-                            <span className="badge bg-secondary">
-                              Waiting
-                            </span>
-                          )}
+  <button
+    className="btn btn-info btn-sm"
+    onClick={() =>
+      window.location = `/track-order/${order.id}`
+    }
+  >
+    Track
+  </button>
 
-                          {order.orderStatus === "In Production" && (
-                            <span className="badge bg-warning text-dark">
-                              In Production
-                            </span>
-                          )}
-
-                          {order.orderStatus === "Quality Check" && (
-                            <span className="badge bg-info text-dark">
-                              Quality Check
-                            </span>
-                          )}
-
-                          {order.orderStatus === "Shipped" && (
-                            <span className="badge bg-primary">
-                              Shipped
-                            </span>
-                          )}
-
-                          {order.orderStatus === "Delivered" && (
-                            <span className="badge bg-success">
-                              Delivered
-                            </span>
-                          )}
-
-                        </td>
+</td>
 
                       </tr>
 
@@ -222,7 +241,7 @@ function Orders() {
                     <tr>
 
                       <td
-                        colSpan="8"
+                        colSpan="9"
                         className="text-center"
                       >
                         No Orders Found

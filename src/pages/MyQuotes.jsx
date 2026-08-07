@@ -18,9 +18,7 @@ function MyQuotes() {
 
     try {
 
-      const response = await API.get(
-        `/api/quotes/${email}`
-      );
+     const response = await API.get(`/quotes/customer/${email}`);
 
       setQuotes(response.data);
 
@@ -39,9 +37,9 @@ function MyQuotes() {
 
     try {
 
-      await API.put(
-        `/api/quotes/${id}/Accepted`
-      );
+     await API.put(
+    `/quotes/${id}/Accepted`
+);
 
       alert("Quote Accepted Successfully");
 
@@ -55,25 +53,24 @@ function MyQuotes() {
     }
   };
 
-  const payNow = async (id) => {
+//   const payNow = async (id) => {
 
-    try {
+//     try {
 
-      await API.put(
-        `/api/quotes/pay/${id}`
-      );
+//      await API.put(
+//     `/quotes/pay/${id}`
+// );
+//       alert("Payment Successful");
 
-      alert("Payment Successful");
+//       loadQuotes();
 
-      loadQuotes();
+//     } catch (error) {
 
-    } catch (error) {
+//       console.error(error);
 
-      console.error(error);
-
-      alert("Payment Failed");
-    }
-  };
+//       alert("Payment Failed");
+//     }
+//   };
 
   const downloadInvoice = (id) => {
 
@@ -176,12 +173,27 @@ function MyQuotes() {
 
           <div className="card-body">
 
-            <div className="table-responsive">
+  <div
+  className="table-responsive"
+  style={{
+    overflowX: "scroll",
+    overflowY: "hidden",
+    whiteSpace: "nowrap",
+    width: "100%",
+    maxWidth: "calc(100vw - 300px)"
+  }}
+>
 
-              <table className="table table-dark table-hover">
+   <table
+  className="table table-dark table-hover"
+  style={{
+    width: "max-content",
+    minWidth: "100%"
+  }}
+>
 
                 <thead>
-
+{/* 
                   <tr>
                     <th>ID</th>
                     <th>Invoice No</th>
@@ -198,7 +210,47 @@ function MyQuotes() {
                     <th>Order Status</th>
                     <th>Actions</th>
                     <th>Invoice</th>
-                  </tr>
+                    <th>Manufacturer</th>
+                    <th>Complexity</th>
+                    <th>Setup Cost</th>
+                    <th>Bend Cost</th>
+                    <th>Material Cost</th>
+                    <th>Manufacturing Cost</th>
+                    <th>GST</th>
+                    <th>Final Amount</th>
+                  </tr> */}
+
+
+                  <tr>
+  <th>ID</th>
+  <th>Invoice No</th>
+  <th>File Name</th>
+  <th>Material</th>
+  <th>Process</th>
+
+  <th>Manufacturer</th>
+  <th>Complexity</th>
+  <th>Setup Cost</th>
+  <th>Bend Cost</th>
+  <th>Material Cost</th>
+  <th>Manufacturing Cost</th>
+  <th>GST</th>
+  <th>Final Amount</th>
+
+  <th>Quantity</th>
+  <th>Factor</th>
+  <th>Delivery</th>
+  <th>Version</th>
+
+  <th>Status</th>
+  <th>Price</th>
+  <th>Payment Status</th>
+<th>Payment Method</th>
+  <th>Order Status</th>
+
+  <th>Actions</th>
+  <th>Invoice</th>
+</tr>
 
                 </thead>
 
@@ -227,6 +279,34 @@ function MyQuotes() {
 
                           <td>
                             {quote.processName}
+                          </td>
+
+                          <td>{quote.manufacturerName || "-"}</td>
+
+                          <td>{quote.complexityLevel || "-"}</td>
+
+                          <td>
+                            ₹{quote.setupCost?.toFixed(2) || "0.00"}
+                          </td>
+
+                          <td>
+                            ₹{quote.bendCost?.toFixed(2) || "0.00"}
+                          </td>
+
+                          <td>
+                            ₹{quote.materialCost?.toFixed(2) || "0.00"}
+                          </td>
+
+                          <td>
+                            ₹{quote.manufacturingCost?.toFixed(2) || "0.00"}
+                          </td>
+
+                          <td>
+                            ₹{quote.gstAmount?.toFixed(2) || "0.00"}
+                          </td>
+
+                          <td className="fw-bold text-warning">
+                            ₹{quote.finalAmount?.toFixed(2) || quote.price}
                           </td>
 
                           <td>
@@ -286,46 +366,85 @@ function MyQuotes() {
                           </td>
 
                           <td>
-
-                            <span className="badge bg-info">
-                              {quote.orderStatus || "Waiting"}
-                            </span>
-
-                          </td>
+  <span className="badge bg-secondary">
+    {quote.paymentMethod || "Cash On Delivery"}
+  </span>
+</td>
 
                           <td>
 
-                            {quote.status === "Approved"
-                              && quote.price ? (
+                            <span
+                                className={
+                                    quote.orderStatus === "Delivered"
+                                        ? "badge bg-success"
+                                        : quote.orderStatus === "Shipped"
+                                        ? "badge bg-primary"
+                                        : quote.orderStatus === "Manufacturing"
+                                        ? "badge bg-warning text-dark"
+                                        : quote.orderStatus === "Assigned"
+                                        ? "badge bg-info"
+                                        : "badge bg-secondary"
+                                }
+                                >
+                                {quote.orderStatus || "Waiting"}
+                                </span>
+
+                          </td>
+                          <td>
+
+                            {quote.status === "Approved" &&
+                              quote.price && (
 
                               <button
                                 className="btn btn-success btn-sm me-2"
-                                onClick={() =>
-                                  acceptQuote(
-                                    quote.id
-                                  )
-                                }
+                                onClick={() => acceptQuote(quote.id)}
                               >
                                 Accept
                               </button>
 
-                            ) : null}
+                            )}
 
-                            {quote.status === "Accepted"
-                              && quote.paymentStatus === "Pending" ? (
+                            {/* {quote.status === "Accepted" &&
+                              quote.paymentStatus === "Pending" && (
 
                               <button
-                                className="btn btn-warning btn-sm"
-                                onClick={() =>
-                                  payNow(
-                                    quote.id
-                                  )
-                                }
+                                className="btn btn-warning btn-sm me-2"
+                                onClick={() => payNow(quote.id)}
                               >
                                 Pay Now
                               </button>
 
-                            ) : null}
+                            )} */}
+
+                            {quote.orderStatus && (
+
+                              <button
+                                className="btn btn-info btn-sm me-2"
+                                onClick={() =>
+                                  window.location =
+    `/track-order/${quote.id}`
+                                }
+                              >
+                                Track
+                              </button>
+
+                            )}
+
+                            {quote.filePath && (
+
+                              <button
+                                className="btn btn-secondary btn-sm"
+                                onClick={() =>
+                                  window.open(
+                                    quote.filePath,
+                                    "_blank"
+                                  )
+                                }
+                              >
+                                CAD
+                              </button>
+
+                            )}
 
                           </td>
 
