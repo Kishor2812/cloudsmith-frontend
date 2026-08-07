@@ -79,7 +79,7 @@ function AdminSidebar() {
             to="/admin-quotes"
             style={{
               textDecoration: "none",
-              color: "#fff",
+              // color: "#fff",
               display: "block",
               padding: "12px",
               borderRadius: "10px",
