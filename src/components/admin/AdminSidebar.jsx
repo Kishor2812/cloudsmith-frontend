@@ -55,7 +55,7 @@ function AdminSidebar() {
             to="/admin"
             style={{
               textDecoration: "none",
-              color: "#fff",
+              // color: "#fff",
               display: "block",
               padding: "12px",
               borderRadius: "10px",
@@ -103,7 +103,7 @@ function AdminSidebar() {
             to="/admin-orders"
             style={{
               textDecoration: "none",
-              color: "#fff",
+              // color: "#fff",
               display: "block",
               padding: "12px",
               borderRadius: "10px",
@@ -127,7 +127,7 @@ function AdminSidebar() {
             to="/admin-users"
             style={{
               textDecoration: "none",
-              color: "#fff",
+              // color: "#fff",
               display: "block",
               padding: "12px",
               borderRadius: "10px",
