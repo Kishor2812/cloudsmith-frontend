@@ -64,7 +64,7 @@ function Footer() {
       <div className="footer-social">
 
   <a
-    href="https://www.linkedin.com/company/cloudsmithmanufacturing"
+    href="https://www.linkedin.com/company/cloud-smith/"
     target="_blank"
     rel="noopener noreferrer"
   >
