@@ -9,9 +9,10 @@ function TrackOrder() {
   const [shipment, setShipment] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    loadOrder();
-  }, []);
+ useEffect(() => {
+  loadOrder();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, []);
 
   const loadOrder = async () => {
     try {

@@ -8,10 +8,10 @@ function ManufacturerDashboard() {
   const manufacturerId =
     localStorage.getItem("manufacturerId");
 
-  useEffect(() => {
-    loadOrders();
-  }, []);
-
+useEffect(() => {
+  loadOrders();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, []);
   const loadOrders = async () => {
 
     try {

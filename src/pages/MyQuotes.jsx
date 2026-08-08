@@ -10,9 +10,10 @@ function MyQuotes() {
 
   const email = localStorage.getItem("email");
 
-  useEffect(() => {
-    loadQuotes();
-  }, []);
+ useEffect(() => {
+  loadOrder();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, []);
 
   const loadQuotes = async () => {
 
