@@ -16,8 +16,9 @@ function FileManager() {
     localStorage.getItem("email");
 
   useEffect(() => {
-    loadFiles();
-  }, []);
+  loadFiles();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, []);
 
   const loadFiles = async () => {
 
