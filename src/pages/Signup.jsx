@@ -8,6 +8,8 @@ import {
 
 function Signup() {
 
+  const [sendingOtp, setSendingOtp] = useState(false);
+
   const navigate = useNavigate();
 
   const [fullName, setFullName] =
@@ -35,55 +37,31 @@ function Signup() {
 
   const sendOtp = async () => {
 
-    if (!email.includes("@")) {
-
-      alert("Enter Valid Email");
-
-      return;
-    }
-
-    try {
-
-      // await axios.post(
-      //   `http://localhost:8080/api/auth/send-otp?email=${email}`
-      // );
-
-      await api.post(
-  `/auth/send-otp?email=${email}`
-);
-
-      alert(
-        "OTP Sent Successfully"
-      );
-
-    } catch (error) {
-
-  if (error.response) {
-
-    const data = error.response.data;
-
-    if (typeof data === "string") {
-
-      alert(data);
-
-    } else if (data.message) {
-
-      alert(data.message);
-
-    } else {
-
-      alert("Failed To Send OTP");
-
-    }
-
-  } else {
-
-    alert("Server Connection Failed");
-
+  if (!email.includes("@")) {
+    alert("Enter Valid Email");
+    return;
   }
 
-}
-  };
+  setSendingOtp(true);
+
+  try {
+
+    await api.post(`/auth/send-otp?email=${email}`);
+
+    alert("OTP Sent Successfully");
+
+  } catch (error) {
+
+    if (error.response) {
+      alert(error.response.data);
+    } else {
+      alert("Server Connection Failed");
+    }
+
+  } finally {
+    setSendingOtp(false);
+  }
+};
 
   const verifyOtp = async () => {
 
@@ -314,12 +292,12 @@ function Signup() {
           Send OTP
         </button> */}
 
-        <button
+  <button
   className="btn btn-warning w-100 mb-3"
   onClick={sendOtp}
-  disabled={otpVerified}
+  disabled={sendingOtp || otpVerified}
 >
-  Send OTP
+  {sendingOtp ? "Sending OTP..." : "Send OTP"}
 </button>
 
         <input
