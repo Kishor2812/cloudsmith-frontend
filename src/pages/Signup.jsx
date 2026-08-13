@@ -35,7 +35,7 @@ function Signup() {
     setLoading] =
     useState(false);
 
-  const sendOtp = async () => {
+const sendOtp = async () => {
 
   if (!email.includes("@")) {
     alert("Enter Valid Email");
@@ -46,23 +46,28 @@ function Signup() {
 
   try {
 
-    await api.post(`/auth/send-otp?email=${email}`);
+    const response = await api.post(
+      `/auth/send-otp?email=${email}`
+    );
 
-    alert("OTP Sent Successfully");
+    alert(
+      `OTP: ${response.data.otp}`
+    );
 
   } catch (error) {
 
     if (error.response) {
-      alert(error.response.data);
+      alert(JSON.stringify(error.response.data));
     } else {
       alert("Server Connection Failed");
     }
 
   } finally {
+
     setSendingOtp(false);
+
   }
 };
-
   const verifyOtp = async () => {
 
     try {
